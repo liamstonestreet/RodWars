@@ -11,6 +11,10 @@ import java.util.List;
 public class ParticleUtil extends MathUtil {
     
     public void spawnSphere(Location center, double radius, int points, Particle particle) {
+        spawnSphere(center, radius, points, particle, null);
+    }
+    
+    public void spawnSphere(Location center, double radius, int points, Particle particle, Particle.DustOptions dustOptions) {
         World world = center.getWorld();
         if (world == null) return; // Check if the world is not null
     
@@ -22,7 +26,11 @@ public class ParticleUtil extends MathUtil {
                 double x = center.getX() + (radius * Math.sin(theta) * Math.cos(phi));
                 double y = center.getY() + (radius * Math.cos(theta));
                 double z = center.getZ() + (radius * Math.sin(theta) * Math.sin(phi));
-                world.spawnParticle(particle, new Location(world, x, y, z), 1);
+                if (dustOptions != null && particle == Particle.REDSTONE) {
+                    world.spawnParticle(particle, new Location(world, x, y, z), 1, dustOptions);
+                } else {
+                    world.spawnParticle(particle, new Location(world, x, y, z), 1);
+                }
             }
         }
     }

@@ -26,7 +26,6 @@ public abstract class RodParticleEffectTask extends ParticleEffectTask {
                 return;
             }
             usedRod.getCooldown().addCooldown(invoker, cooldownDuration); // add cooldown
-            System.out.println("Poo");
         }
         
         // start!

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="RodWars:jar">
-    <output-path>$PROJECT_DIR$/../../../Minecraft Servers/Test Servers/1.20.4 Test Server/plugins</output-path>
-    <root id="archive" name="RodWars.jar">
-      <element id="module-output" name="RodWars" />
-    </root>
-  </artifact>
-</component>

@@ -1,6 +1,7 @@
 package me.liam.rodwars.particleEffects.bounceRod;
 
 import me.liam.rodwars.RodParticleEffectTask;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
@@ -36,9 +37,17 @@ public class SphereBubble extends RodParticleEffectTask {
     
     @Override
     protected void loop() {
-        getParticleUtil().spawnSphere(source.getLocation(), 3, 30, Particle.WATER_BUBBLE);
+        //getParticleUtil().spawnSphere(source.getLocation(), 3, 30, Particle.WATER_BUBBLE);
+        getParticleUtil().spawnSphere(source.getLocation(), 3, 40, Particle.REDSTONE,
+                new Particle.DustOptions(Color.BLUE, .5f));
         source.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, source.getLocation(), 0);
-        source.getNearbyEntities(3, 3, 3).forEach(e -> e.setVelocity(new Vector(0, 1, 0)));
+        source.getNearbyEntities(3, 3, 3).forEach(e -> {
+            if (e.getUniqueId().equals(invoker.getUniqueId()) && (source.getVelocity().length() > 0.001)) {
+                // do nothing to the player who shot the bubble if the bubble is still travelling.
+                return;
+            }
+            e.setVelocity(new Vector(0, 1, 0));
+        });
     }
     
     @Override
@@ -48,7 +57,7 @@ public class SphereBubble extends RodParticleEffectTask {
     
     @Override
     public boolean isFinished() {
-        return !invoker.isOnline() || seconds > effectDuration;
+        return !invoker.isOnline();
     }
     
 }

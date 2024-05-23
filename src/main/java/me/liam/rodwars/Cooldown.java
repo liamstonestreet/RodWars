@@ -1,6 +1,7 @@
 package me.liam.rodwars;
 
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -35,6 +36,11 @@ public class Cooldown {
     }
     
     public boolean hasCooldown(Player p) {
+        // TODO Remove this after testing is done!
+        if (ChatColor.stripColor(p.getDisplayName()).equals("Kubokuu")) {
+            return false;
+        }
+        
         if (cooldowns.containsKey(p.getUniqueId())) {
             long currentTime = System.currentTimeMillis();
             long cooldownDone = cooldowns.get(p.getUniqueId());

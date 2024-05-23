@@ -1,5 +1,5 @@
 
-<h1> Rod Wars README</h1>
+<h1>Rod Wars</h1>
 
 This is the documentation for Rod Wars.
 

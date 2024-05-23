@@ -104,6 +104,23 @@ public abstract class Rod {
         ChatUtil.log(Level.INFO, "Registered all events for class '" + getClass().getSimpleName() + "'");
     }
     
+    
+    /**
+     * This method handles cooldowns automatically.
+     * @return true if cooldown was added (not originally there), and false if player already had cooldown.
+     * Example usage:
+     *      if (!handleCooldown(p, 5)) return;
+     *      // Logic! If the player didn't have a cooldown, now they do for next time!
+     */
+    protected boolean handleCooldown(Player p, double duration) {
+        if (cooldown.hasCooldown(p)) {
+            ChatUtil.sendColor(p, "&cOn cooldown!");
+            return false;
+        }
+        cooldown.addCooldown(p, duration);
+        return true;
+    }
+    
     /** //////////////////////// STATIC METHODS ///////////////////////// **/
     
     /**

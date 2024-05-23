@@ -95,8 +95,6 @@ public class SigmaRod extends Rod {
                     return;
                 }
                 
-                // DO STUFF!!!
-                
                 // 1: get the current charge
                 double charge = e.getDamage() * 5; // we will make the damage equal to the charge
                 e.setDamage(charge);

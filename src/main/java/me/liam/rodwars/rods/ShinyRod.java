@@ -1,9 +1,7 @@
 package me.liam.rodwars.rods;
 
 import me.liam.rodwars.Rod;
-import me.liam.rodwars.RodItem;
 import me.liam.rodwars.RodWars;
-import me.liam.rodwars.utils.ChatUtil;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -14,6 +12,8 @@ import org.bukkit.util.Vector;
 
 
 public class ShinyRod extends Rod {
+    
+    private final double cooldownDuration = 15;
     
     public ShinyRod() {
         super(Material.BLAZE_ROD, "Shiny Rod", "&b<< &2&lShiny Rod &b>>");
@@ -26,14 +26,10 @@ public class ShinyRod extends Rod {
         Location start = getParticleUtil().getInfrontOf(p, 2);
     
         // COOLDOWN MANAGEMENT
-        if (getCooldown().hasCooldown(p)) {
-            ChatUtil.sendColor(p, "&cOn cooldown!");
-            return;
-        }
-        // add cooldown!!!
-        getCooldown().addCooldown(p, 15);
+        if (!handleCooldown(p, cooldownDuration)) return;
         
-        // VARS
+        // Start the effect!!!!
+        // variables/constants
         long delay = 1;
         
         // Spawn the warden particle effect first
