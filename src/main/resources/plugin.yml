@@ -1,0 +1,10 @@
+name: RodWars
+version: '${project.version}'
+main: me.liam.rodwars.RodWars
+api-version: 1.20
+author: Liam7D
+commands:
+  rodwars:
+    description: The base command for the Rod Wars plugin.
+    aliases:
+      - rw
