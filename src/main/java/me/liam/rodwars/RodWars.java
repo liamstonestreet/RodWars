@@ -3,7 +3,6 @@ package me.liam.rodwars;
 import lombok.Getter;
 import me.liam.rodwars.listeners.PlayerJoin;
 import me.liam.rodwars.listeners.PlayerRespawn;
-import me.liam.rodwars.utils.ChatUtil;
 import me.liam.rodwars.utils.MathUtil;
 import me.liam.rodwars.utils.ParticleUtil;
 import me.liam.rodwars.utils.interfaces.ICommand;
@@ -19,6 +18,9 @@ public final class RodWars extends JavaPlugin implements IPlugin {
     
     public static RodWars getInstance() {
         return getPlugin(RodWars.class);
+    }
+    public static String getPackageName() {
+        return getInstance().getClass().getPackage().getName();
     }
     
     @Override

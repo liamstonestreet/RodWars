@@ -8,13 +8,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.C;
+import org.reflections.Reflections;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Level;
@@ -143,33 +141,52 @@ public abstract class Rod {
      * @assumes the package with the Rod classes is directly in the 'me.Liam.rodwars' package
      * @param packageName the name of the package with all the Rod classes inside
      */
-    public static void buildAllRods(String packageName) {
-        String sourcePath = "me.liam.rodwars";
-        String absolutePath = "C:\\Users\\Liam\\Desktop\\Non-School\\Minecraft\\CODING Related\\" +
-                "IntelliJ Workspaces\\RodWars\\src\\main\\java\\me\\liam\\rodwars\\";
-        try {
-            File directory = new File(absolutePath + packageName);
-            if (directory.exists()) {
-                String[] files = directory.list();
-                for (String file : files) {
-                    if (file.endsWith(".java")) {
-                        // removes the .java suffix.
-                        String className = packageName + '.' + file.replaceAll("\\.java", "");
-                        Class<?> clazz = Class.forName(sourcePath + "." + className);
-                        
-                        // check if clazz extends Rod
-                        if (clazz.getSuperclass() == Rod.class && Rod.class.isAssignableFrom(clazz)) {
-                            Constructor<?> constructor = clazz.getConstructor();
-                            constructor.newInstance(); // NEW INSTANCE!
-                            ChatUtil.log(Level.INFO, "Built the rod '" + clazz.getSimpleName() + "'");
-                        }
-                    }
-                }
+//    public static void buildAllRods(String packageName) {
+//        String sourcePath = "me.liam.rodwars";
+//        String absolutePath = "C:\\Users\\Liam\\Desktop\\Non-School\\Minecraft\\CODING Related\\" +
+//                "IntelliJ Workspaces\\RodWars\\src\\main\\java\\me\\liam\\rodwars\\";
+//        try {
+//            File directory = new File("..\\" + absolutePath + packageName);
+//            if (directory.exists()) {
+//                String[] files = directory.list();
+//                for (String file : files) {
+//                    if (file.endsWith(".java")) {
+//                        // removes the .java suffix.
+//                        String className = packageName + '.' + file.replaceAll("\\.java", "");
+//                        Class<?> clazz = Class.forName(sourcePath + "." + className);
+//
+//                        // check if clazz extends Rod
+//                        if (clazz.getSuperclass() == Rod.class && Rod.class.isAssignableFrom(clazz)) {
+//                            Constructor<?> constructor = clazz.getConstructor();
+//                            constructor.newInstance(); // NEW INSTANCE!
+//                            ChatUtil.log(Level.INFO, "Built the rod '" + clazz.getSimpleName() + "'");
+//                        }
+//                    }
+//                }
+//            } else {
+//                System.out.println("Does not exist.");
+//            }
+//        } catch (Exception e) {
+//            ChatUtil.log(Level.WARNING, "Error occurred while trying to build rods! Try reloading the server. " +
+//                    "Error: " + e.getLocalizedMessage());
+//        }
+//    }
+    
+    /**
+     * @assumes the package with the Rod classes is directly in the 'me.Liam.rodwars' package
+     * @param rodsPackageName the name of the package with all the Rod classes inside
+     */
+    public static void buildAllRods(String rodsPackageName) {
+        for (Class<?> clazz : new Reflections(RodWars.getPackageName() + "." + rodsPackageName)
+                .getSubTypesOf(Rod.class)) {
+            try {
+                // Make new instance (calling constructor registers the rod)
+                clazz.getDeclaredConstructor().newInstance();
+                ChatUtil.log(Level.INFO, "Built the rod '" + clazz.getSimpleName() + "'");
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            ChatUtil.log(Level.WARNING, "Error occurred while trying to build rods! Try reloading the server. " +
-                    "Error: " + e.getLocalizedMessage());
-            //e.printStackTrace();
         }
     }
     
