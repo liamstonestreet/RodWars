@@ -23,6 +23,7 @@ public class BounceRod extends Rod {
     
     @Override
     protected void handleRightClickBlock(PlayerInteractEvent e) {
+        // TODO fix this calling the effect twice when block is clicked
         handleRightClickAir(e);
     }
 }

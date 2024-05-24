@@ -63,7 +63,7 @@ public abstract class ParticleEffectTask extends BukkitRunnable {
         } catch (Exception e) {
             // handle? or no need
         }
-        seconds += 1.0 / 20;
+        seconds += 0.05;
     }
     
     @Override

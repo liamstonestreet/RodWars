@@ -15,6 +15,15 @@ public class ParticleUtil extends MathUtil {
     }
     
     public void spawnSphere(Location center, double radius, int points, Particle particle, Particle.DustOptions dustOptions) {
+        spawnSphere(center, radius, points, particle, dustOptions, null);
+    }
+    
+    public void spawnSphere(Location center, double radius, int points, Particle particle, Particle.DustTransition transition) {
+        spawnSphere(center, radius, points, particle, null, transition);
+    }
+    
+    public void spawnSphere(Location center, double radius, int points, Particle particle, Particle.DustOptions dustOptions,
+                            Particle.DustTransition transition) {
         World world = center.getWorld();
         if (world == null) return; // Check if the world is not null
     
@@ -26,10 +35,13 @@ public class ParticleUtil extends MathUtil {
                 double x = center.getX() + (radius * Math.sin(theta) * Math.cos(phi));
                 double y = center.getY() + (radius * Math.cos(theta));
                 double z = center.getZ() + (radius * Math.sin(theta) * Math.sin(phi));
+                Location curr = new Location(world, x, y, z);
                 if (dustOptions != null && particle == Particle.REDSTONE) {
-                    world.spawnParticle(particle, new Location(world, x, y, z), 1, dustOptions);
+                    spawnParticle(particle, curr, 0, dustOptions);
+                } else if (transition != null && particle == Particle.DUST_COLOR_TRANSITION) {
+                    spawnParticle(particle, curr, 0, transition);
                 } else {
-                    world.spawnParticle(particle, new Location(world, x, y, z), 1);
+                    spawnParticle(particle, curr, 0);
                 }
             }
         }
@@ -152,6 +164,39 @@ public class ParticleUtil extends MathUtil {
     
     public Entity spawnEntity(Location loc, EntityType type) {
         return loc.getWorld().spawnEntity(loc, type);
+    }
+    
+    public void spawnParticle(Particle particle, Location loc, int amount) {
+        spawnParticle(particle, loc, amount, null);
+    }
+    
+    public void spawnParticle(Particle particle, Location loc, int amount, Particle.DustOptions dustOptions) {
+        if (dustOptions != null && particle == Particle.REDSTONE) {
+            loc.getWorld().spawnParticle(particle, loc, amount, dustOptions);
+        } else {
+            loc.getWorld().spawnParticle(particle, loc, amount);
+        }
+    }
+    
+    public void spawnParticle(Particle particle, Location loc, int amount, Particle.DustTransition transition) {
+        if (transition != null && particle == Particle.DUST_COLOR_TRANSITION) {
+            loc.getWorld().spawnParticle(particle, loc, amount, transition);
+        } else {
+            loc.getWorld().spawnParticle(particle, loc, amount);
+        }
+    }
+    
+    /**
+     * @param from start location
+     * @param to end location
+     * @param particleDensity density of particles. NOTE: this is sensitive. '2' doubles number of particles.
+     */
+    public void spawnParticleLine(Location from, Location to, Particle particle, double particleDensity) {
+        Vector dir = to.toVector().clone().subtract(from.toVector()).normalize();
+        for (double i = 0; i <= from.distance(to); i += 1 / particleDensity) {
+            Location curr = from.clone().add(dir.clone().multiply(i));
+            spawnParticle(particle, curr, 0);
+        }
     }
     
 }

@@ -37,13 +37,14 @@ public class SphereBubble extends RodParticleEffectTask {
     
     @Override
     protected void loop() {
-        //getParticleUtil().spawnSphere(source.getLocation(), 3, 30, Particle.WATER_BUBBLE);
-        getParticleUtil().spawnSphere(source.getLocation(), 3, 40, Particle.REDSTONE,
-                new Particle.DustOptions(Color.BLUE, .5f));
+        getParticleUtil().spawnSphere(source.getLocation(), 3, 30, Particle.WATER_BUBBLE);
+//        getParticleUtil().spawnSphere(source.getLocation(), 3, 30, Particle.REDSTONE,
+//                new Particle.DustOptions(Color.BLUE, .2f));
         source.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, source.getLocation(), 0);
         source.getNearbyEntities(3, 3, 3).forEach(e -> {
-            if (e.getUniqueId().equals(invoker.getUniqueId()) && (source.getVelocity().length() > 0.001)) {
-                // do nothing to the player who shot the bubble if the bubble is still travelling.
+            if (e.getUniqueId().equals(invoker.getUniqueId()) && !source.isDead()
+                    || e.getUniqueId().equals(source.getUniqueId())) {
+                // do nothing to the player who shot the bubble if the bubble is still alive (moving).
                 return;
             }
             e.setVelocity(new Vector(0, 1, 0));
