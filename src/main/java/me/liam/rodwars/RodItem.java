@@ -25,7 +25,7 @@ public class RodItem {
     public RodItem(Material type) {
         // Can only be one of these 4 types. If not, it defaults to Blaze Rod.
         type = Arrays.asList(Material.BLAZE_ROD, Material.END_ROD, Material.LIGHTNING_ROD, Material.FISHING_ROD)
-                .contains(type) ? Material.BLAZE_ROD : type;
+                .contains(type) ? type : Material.BLAZE_ROD;
         rodItem = new ItemStack(type);
         meta = rodItem.getItemMeta();
         // add default item flags (By default, it is all item flags).
